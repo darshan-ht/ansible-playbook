@@ -2,16 +2,38 @@
   name: User access Management
   hosts: localhost
   vars:
-    - USER_NAME: "tester"
-    - PATH_PUBLIC_KEY: 'dev.pub'
+    - USER_DEV: "dev21"
+    - PUBLIC_KEY_DEV: 'dev.pub'
+    - USER_ADMIN: "admin21"
+    - PUBLIC_KEY_ADMIN: 'admin.pub'
   tasks:
+    ##Add dev user with limited
     - name: Add the user 'dev'
       user:
-        name: '{{USER_NAME}}'
+        name: '{{USER_DEV}}'
         append: yes
 
     - name: Set authorized key for user from file
       authorized_key:
-        user: '{{USER_NAME}}'
+        user: '{{USER_DEV}}'
         state: present
-        key: "{{ lookup('file', '{{PATH_PUBLIC_KEY}}') }}"
+        key: "{{ lookup('file', '{{PUBLIC_KEY_DEV}}') }}"
+
+    ##Add admin user with all privillage
+    - name: Add the user 'dev'
+      user:
+        name: '{{USER_ADMIN}}'
+        append: yes
+
+    - name: Set authorized key for user from file
+      authorized_key:
+        user: '{{USER_ADMIN}}'
+        state: present
+        key: "{{ lookup('file', '{{PUBLIC_KEY_ADMIN}}') }}"
+
+    - name: set root privillages
+      lineinfile:
+        path: /etc/sudoers
+        line: '{{USER_ADMIN}} ALL=(ALL:ALL) ALL'
+        insertafter: EOF
+      become_user: root
