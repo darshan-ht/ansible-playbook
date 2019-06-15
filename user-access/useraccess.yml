@@ -2,10 +2,10 @@
   name: User access Management
   hosts: localhost
   vars:
-    - USER_DEV: "dev21"
-    - PUBLIC_KEY_DEV: 'dev.pub'
-    - USER_ADMIN: "admin21"
-    - PUBLIC_KEY_ADMIN: 'admin.pub'
+    - USER_DEV: "dev123"
+    - PUBLIC_KEY_DEV: 'public_keys/dev.pub'
+    - USER_ADMIN: "admin123"
+    - PUBLIC_KEY_ADMIN: 'public_keys/admin.pub'
   tasks:
     ##Add dev user with limited
     - name: Add the user 'dev'
@@ -34,6 +34,6 @@
     - name: set root privillages
       lineinfile:
         path: /etc/sudoers
-        line: '{{USER_ADMIN}} ALL=(ALL:ALL) ALL'
-        insertafter: EOF
+        line: '{{USER_ADMIN}} ALL=(ALL)NOPASSWD:ALL'
+        insertbefore: EOF
       become_user: root
