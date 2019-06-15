@@ -1,0 +1,17 @@
+-
+  name: User access Management
+  hosts: localhost
+  vars:
+    - USER_NAME: "tester"
+    - PATH_PUBLIC_KEY: 'dev.pub'
+  tasks:
+    - name: Add the user 'dev'
+      user:
+        name: '{{USER_NAME}}'
+        append: yes
+
+    - name: Set authorized key for user from file
+      authorized_key:
+        user: '{{USER_NAME}}'
+        state: present
+        key: "{{ lookup('file', '{{PATH_PUBLIC_KEY}}') }}"
