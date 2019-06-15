@@ -1,0 +1,73 @@
+#
+# Copyright (C) 2019-2020 Heaptrace Technology
+#
+
+-
+  name: Deploy Docker on machine
+  hosts: localhost
+  tasks:
+
+##Check JAVA version 
+    - name: Fetch Java version
+      shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/"//g'
+      register: java_version
+
+##Install JAVA if not present
+    - name: "Upgrade Java Version"
+      command: date
+      when: java_version is not defined
+
+##Check NPM version 
+
+##Install NPM if not present 
+
+##Check angular cli version
+
+##Install Angular CLI if not installed
+
+##Git clone of the project
+    - name: Node-App = Git pull node app
+      git:
+       repo: 'https://github.com/darshan-ht/node-app.git'
+       dest: ./code/node-app
+       clone: yes
+      become_user: root
+
+##Git clone of the project
+    - name: angular app = Git pull 
+      git:
+       repo: 'https://github.com/darshan-ht/angular-app.git'
+       dest: ./code/angular-app
+       clone: yes
+      become_user: root
+
+##Git clone of the project
+    - name: Docker-compose = Git pull 
+      git:
+       repo: 'https://github.com/darshan-ht/compose.git'
+       dest: ./code/compose
+       clone: yes
+
+##Angular-app build
+    - name: Build angular application
+      command: sudo npm install
+      args:
+        chdir: ./code/angular-app/
+      become_user: root
+
+##Angular-app build
+    - name: Build angular application
+      command: sudo ng build
+      args:
+        chdir: ./code/angular-app/
+      become_user: root
+
+##Docker compose
+    - name: run docker-compose
+      command: docker-compose up -d --build
+      args:
+        chdir: ./code/compose/
+      become_user: root
+      register: out
+
+    - debug: var=out.stdout_lines
