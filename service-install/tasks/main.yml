@@ -11,7 +11,7 @@
    - angular_cli_version_min: 8.0.3
    - npm_version_min: 6.0.5
    - git_version_min: 2.7.4
-
+   - git_code_location: ../files/
   tasks:
 
      ##Check JAVA version 
@@ -78,13 +78,13 @@
     - name: Clean local code before git pull
       file:
         state: absent
-        path: "./code/"
+        path: '{{git_code_location}}/'
 
      ##Git clone of the project
     - name: Node-App = Git pull node app
       git:
        repo: 'https://github.com/darshan-ht/node-app.git'
-       dest: ./code/node-app
+       dest: '{{git_code_location}}/node-app'
        clone: yes
       become_user: root
 
@@ -92,7 +92,7 @@
     - name: angular app = Git pull 
       git:
        repo: 'https://github.com/darshan-ht/angular-app.git'
-       dest: ./code/angular-app
+       dest: '{{git_code_location}}/angular-app'
        clone: yes
       become_user: root
 
@@ -100,7 +100,7 @@
     - name: Docker-compose = Git pull 
       git:
        repo: 'https://github.com/darshan-ht/compose.git'
-       dest: ./code/compose
+       dest: '{{git_code_location}}/compose'
        clone: yes
       become_user: root
 
@@ -108,19 +108,19 @@
     - name: Install angular dependancy
       command: sudo npm install
       args:
-        chdir: ./code/angular-app/
+        chdir: '{{git_code_location}}/angular-app/'
       become_user: root
 
     ##Angular-app build
     - name: Build angular application
       command: sudo ng build
       args:
-        chdir: ./code/angular-app/
+        chdir: '{{git_code_location}}/angular-app/'
       become_user: root
 
     ##Docker compose
     - name: run docker-compose
       command: docker-compose up -d --build
       args:
-        chdir: ./code/compose/
+        chdir: '{{git_code_location}}/compose/'
       become_user: root
