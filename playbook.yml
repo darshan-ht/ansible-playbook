@@ -5,6 +5,13 @@
 -
   name: Playbook for services installations
   hosts: localhost
+  vars:
+   - docker_compose_version_min: 1.24.0
+   - docker_min_version: 18.06.1-ce
+   - angular_cli_version_min: 8.0.3
+   - npm_version_min: 6.0.5
+   - git_version_min: 2.7.4
+
   tasks:
 
      ##Check JAVA version 
@@ -35,7 +42,7 @@
      ## Check Docker-compose version
     - name: Fetch Docker-compose version
       shell: docker-compose version | grep docker-compose | awk '{print $3}' | sed 's/.$//'
-      register: docker_version
+      register: docker_compose_version
 
      ##Install Git if not present
     - name: Install Git
@@ -44,6 +51,7 @@
         state: present
         update_cache: yes
       register: git_install
+      when: git_version is not defined or git_version is not version(git_version_min, '>=')
 
      ##Install Docker if not present
     - name: Install Docker
@@ -51,8 +59,7 @@
         name: docker.io
         state: present
         update_cache: yes
-      register: docker_install
-    - debug: var=docker_install.stdout_lines
+      when: docker_version is not defined or docker_version is not version(docker_min_version, '>=')
 
      ##Install Docker-Compose if not present
     - name: Install Docker Compose
@@ -60,14 +67,18 @@
         name: docker-compose
         state: present
         update_cache: yes
-
-     ##Install NPM if not present 
-
-
+      when: docker_compose_version is not defined or docker_compose_version is not version(docker_compose_version_min, '>=')
 
      ##Install Angular CLI if not installed
     - name: Install Angular CLI
       shell: npm install -g @angular/cli
+      when: angular_version is not defined or angular_version is not version(angular_cli_version_min, '>=')
+
+     ##Clean old code before git pull.
+    - name: Clean local code before git pull
+      file:
+        state: absent
+        path: "./code/"
 
      ##Git clone of the project
     - name: Node-App = Git pull node app
