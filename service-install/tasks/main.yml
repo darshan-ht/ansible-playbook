@@ -83,24 +83,24 @@
      ##Git clone of the project
     - name: Node-App = Git pull node app
       git:
-       repo: 'https://github.com/darshan-ht/node-app.git'
-       dest: '{{git_code_location}}/node-app'
+       repo: 'https://github.com/heaptracetechnology/ht-node-app.git'
+       dest: '{{git_code_location}}/ht-node-app'
        clone: yes
       become_user: root
 
     ##Git clone of the project
     - name: angular app = Git pull 
       git:
-       repo: 'https://github.com/darshan-ht/angular-app.git'
-       dest: '{{git_code_location}}/angular-app'
+       repo: 'https://github.com/heaptracetechnology/ht-angular-app.git'
+       dest: '{{git_code_location}}/ht-angular-app'
        clone: yes
       become_user: root
 
     ##Git clone of the project
     - name: Docker-compose = Git pull 
       git:
-       repo: 'https://github.com/darshan-ht/compose.git'
-       dest: '{{git_code_location}}/compose'
+       repo: 'https://github.com/heaptracetechnology/ht-compose.git'
+       dest: '{{git_code_location}}/ht-compose'
        clone: yes
       become_user: root
 
@@ -108,19 +108,19 @@
     - name: Install angular dependancy
       command: sudo npm install
       args:
-        chdir: '{{git_code_location}}/angular-app/'
+        chdir: '{{git_code_location}}/ht-angular-app/'
       become_user: root
 
     ##Angular-app build
     - name: Build angular application
       command: sudo ng build
       args:
-        chdir: '{{git_code_location}}/angular-app/'
+        chdir: '{{git_code_location}}/ht-angular-app/'
       become_user: root
 
     ##Docker compose
     - name: run docker-compose
       command: docker-compose up -d --build
       args:
-        chdir: '{{git_code_location}}/compose/'
+        chdir: '{{git_code_location}}/ht-compose/'
       become_user: root
