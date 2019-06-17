@@ -5,11 +5,10 @@
   name: User access Management
   hosts: localhost
   vars:
-
-    - USER_DEV: "dev22"
-    - PUBLIC_KEY_DEV: 'public_keys/dev.pub'
-    - USER_ADMIN: "admin22"
-    - PUBLIC_KEY_ADMIN: 'public_keys/admin.pub'
+    - USER_DEV: "dev5"
+    - PUBLIC_KEY_DEV: '../files/dev.pub'
+    - USER_ADMIN: "admin5"
+    - PUBLIC_KEY_ADMIN: '../files/admin.pub'
 
   tasks:
     ##Install OpenSSH server
